@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'bloc/user_event.dart';
+import 'bloc/user_bloc.dart';
+import 'repository/user_repository.dart';
 import 'screens/user_screen.dart';
 
 void main() {
@@ -8,16 +13,22 @@ void main() {
 class UserApp extends StatelessWidget {
   const UserApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final userRepository = UserRepository(); // create the repository
+
     return MaterialApp(
       title: 'User List App',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: UserScreen(), // The single-screen app
+      home: BlocProvider(
+      create: (_) => UserBloc(userRepository)..add(LoadUsers()), // inject BLoC and trigger LoadUsers
+      child: UserScreen(),
+      ),
     );
   }
 }
+
+
 
 // class MyHomePage extends StatefulWidget {
 //   const MyHomePage({super.key, required this.title});
